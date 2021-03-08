@@ -1,0 +1,36 @@
+@media screen and (min-width: 768px) {
+	.columned-list {
+		column-count: 2;
+	}
+}
+
+@media screen and (min-width: 992px) {
+	.columned-list {
+		column-count: 3;
+	}
+}
+
+.columned-list li {
+	break-inside: avoid;
+}
+
+li {
+	word-break: break-all;
+	padding-right: 10px;
+}
+
+#about-you-image {
+	max-width: 100%;
+}
+
+video:not([src]), img:not([src]) {
+	display: none;
+}
+
+section:not(.active) {
+	display: none;
+}
+
+#profile-changes-section img {
+	max-width: 100px;
+}

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="style.css">
+	<title>Hello, world!</title>
+</head>
+<body>
+	<div class="container">
+		<h1>Hello, world!</h1>
+
+		<br><br>
+
+		<input type="file" id="file-control" webkitdirectory directory multiple class="form-control">
+
+		<br><hr><br>
+		<section id="about-you-section">
+			<h1>About You</h1>
+			<div class="card" id="about-you">
+				<div class="row g-0">
+					<div class="col-md-4">
+						<img src id="about-you-image">
+					</div>
+					<div class="col-md-8">
+						<h5 class="card-title" id="about-you-username">@<span class="content-value"></span></h5>
+						<div id="about-you-email">Email: <span class="content-value"></span></div>
+						<div id="about-you-bio">Bio: <span class="content-value"></span></div>
+						<br><hr><br>
+						<div id="about-you-location">Instagram has "inferred" that you're based in <span id="about-you-location-location"></span></div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="profile-changes-section">
+			<h1>Profile Changes</h1>
+			<div id="profile-changes">
+				<p class="lead">You've updated your profile at least <span id="profile-changes-count"></span> time(s) in some way:</p>
+				<table id="profile-changes-list" class="table table-hover table-striped table-sm table-bordered table-responsive">
+					<thead>
+						<tr>
+							<th>You changed your</th>
+							<th>From</th>
+							<th>To</th>
+							<th>On</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+			<div id="password-changes">
+				<p class="lead">And you've changed your password <span id="password-change-count"></span> time(s), most recently on <span id="password-change-last-date"></span>.</p>
+			</div>
+		</section>
+		<section id="interests-section">
+			<h1>Interests</h1>
+			<p class="lead">Here's what Instagram thinks you're intersted in.</p>
+			<ul class="columned-list" id="interests"></ul>
+		</section>
+		<section id="stories-section">
+			<h1>Stories</h1>
+			<p class="lead">You thought stories went away? Think again. You've posted at least <span id="stories-count"></span> of them since <span id="stories-first-date"></span>. Here's your first few.</p>
+			<div class="row">
+				<div class="card-group" id="stories-content"></div>
+			</div>
+			<template id="story-content">
+				<div class="col-sm-6 col-md-4 col-lg-2">
+					<div class="card">
+						<img>
+						<video controls></video>
+						<div class="card-body">
+							<h5 class="card-title">Special title treatment</h5>
+							<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+						</div>
+					</div>
+				  </div>
+			</template>
+		</section>
+		<section id="posts-section">
+			<h1>Posts</h1>
+			<p class="lead">You've posted at least <span id="posts-count"></span> times since <span id="posts-first-date"></span>.</p>
+			<p><span id="posts-with-location-count"></span> of your posts have location data attached to them.</p>
+			<p><span id="posts-with-multiple-photos-count"></span> of your posts have multiple photos.</p>
+			<p><span id="posts-are-photo-count"></span> of your posts are photos; <span id="posts-are-video-count"></span> are videos.</p>
+		</section>
+		<section id="devices-section">
+			<h1>Devices</h1>
+			<p class="lead">Instagram has tracked at least <span id="devices-count"></span> phones/tablets used to get to your account.</p>
+			<ul id="devices-list"></ul>
+		</section>
+		<section id="comments-section">
+			<h1>Comments</h1>
+			<p class="lead">You've left at least <span id="comments-count"></span> comments on posts from <span id="comment-target-count"></span> accounts.</p>
+			<ul class="columned-list" id="comment-targets"></ul>
+		</section>
+		<section id="likes-section">
+			<h1>Likes</h1>
+			<p class="lead">You've liked least <span id="likes-posts-count"></span> posts from <span id="likes-posts-target-count"></span> accounts.</p>
+			<ul class="columned-list" id="likes-posts-targets"></ul>
+			<p class="lead">And comments? You've liked at least <span id="likes-comments-count"></span> of them from <span id="likes-comments-target-count"></span> accounts.</p>
+			<ul class="columned-list" id="likes-comments-targets"></ul>
+		</section>
+		<section id="logins-section">
+			<h1>Logins</h1>
+			<p class="lead">Instagram remembers you logging in <span id="logins-count"></span> time(s):</p>
+			<table id="logins-list" class="table table-hover table-striped table-sm table-bordered table-responsive">
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>IP Address</th>
+						<th>Browser</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+			<template id="login-content">
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</template>
+		</section>
+		<section id="suggestions-section">
+			<h1>Instagram's "Suggestions"</h1>
+			<p class="lead">Instagram suggests accounts to look at. You've viewed <span id="suggested-accounts-count"></span> of them.</p>
+			<ul class="columned-list" id="suggested-accounts-list"></ul>
+		</section>
+		<section id="messages-section">
+			<h1>Messages</h1>
+			<p class="lead">Chatting? Instagram's got a copy of your conversations with <span id="messages-conversations-count"></span> people.</p>
+			<ul class="columned-list" id="messages-conversations-list"></ul>
+		</section>
+	</div>
+
+	<style>
+		/* For development, so I don't have to scroll */
+		/*section:not(#stories-section) {
+			display: none;
+		}*/
+	</style>
+
+	<script src="support_files/iphones.js"></script>
+	<script src="script.js"></script>
+</body>
+</html>
