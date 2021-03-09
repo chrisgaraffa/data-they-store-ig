@@ -250,7 +250,9 @@ function devices(files) {
 	if (!devices_file) { return; }
 
 	parseFileContentsAsJSON(devices_file, (contents) => {
-		const devices = contents.devices_devices;
+		const devices = contents.devices_devices.map( d => {
+			return new Device(d);
+		});
 
 		document.getElementById('devices-count').textContent = devices.length;
 
@@ -258,10 +260,9 @@ function devices(files) {
 
 		devices.forEach( device => {
 			const deviceLI = document.createElement('li');
-			const deviceDetails = parseDevice(device.string_map_data['User Agent'].value);
-			const deviceLastSeen = dateToReadableDate(device.string_map_data['Last Login'].timestamp);
-			deviceLI.textContent = `${deviceDetails.instagram_version} on ${deviceDetails.device} running ${deviceDetails.os_version} last seen on ${deviceLastSeen}`;
-	
+			const deviceLastSeen = dateToReadableDate(device.lastSeen());
+			deviceLI.textContent = `${device.instagramVersion()} on ${device.deviceModel()} running ${device.deviceOSversion()} last seen on ${deviceLastSeen}`;
+
 			deviceList.appendChild(deviceLI);
 		});
 	});
@@ -558,40 +559,6 @@ function parsePathToName(file) {
 }
 //#endregion
 
-//#region Device Utilities
-function parseDevice(deviceDescription) {
-	//TODO: iPads, Android, "Other"?
-	const results = {};
-	results.instagram_version = deviceDescription.match(/Instagram [0-9]+/);
-
-	if (deviceDescription.lastIndexOf('iOS') !== -1) {
-		if (deviceDescription.lastIndexOf('iPhone') !== -1) {
-			results.device = parseIPhoneDeviceName(deviceDescription.match(/iPhone[0-9,]+/)[0]);
-		}
-
-		results.os_version = deviceDescription.match(/(iOS [^;]+)/)[1].replaceAll('_', '.');
-	}
-	return results;
-}
-
-function parseIPhoneDeviceName(name) {
-	/* global iPhones */
-	const phonePossibility = iPhones.filter( phone => {
-		return phone.codes.includes(name);
-	});
-
-	if (phonePossibility.length) {
-		return phonePossibility[0].name;
-	} else {
-		return "Unknown iPhone";
-	}
-}
-
-function parseIpadDeviceName(name) {
-	//TODO: Pull in from https://www.theiphonewiki.com/wiki/Models
-}
-//#endregion
-
 //#region Date Utilities
 function igDateToJSDate(d) {
 	d *= 1000; // IG just drops the milliseconds in the export file.
@@ -756,6 +723,59 @@ class MediaPost {
 
 	isPhoto() {
 		return this.source.media[0].uri.indexOf('.jpg') !== -1;
+	}
+}
+
+class Device {
+	constructor(deviceObj) {
+		this.source = deviceObj;
+		this.deviceDescription = this.source.string_map_data['User Agent'].value;
+	}
+
+	deviceModel() {
+		if (this.deviceType() == 'iPhone') {
+			return this.parseIPhoneDeviceName(this.deviceDescription.match(/iPhone[0-9,]+/)[0]);
+		} else if (this.deviceType() == 'iPad') {
+			return this.parseIpadDeviceName(this.deviceDescription.match(/iPad[0-9,]+/)[0]);
+		}
+	}
+
+	deviceType() {
+		if (this.deviceDescription.lastIndexOf('iPhone') !== -1) {
+			return 'iPhone';
+		} else if (this.deviceDescription.lastIndexOf('iPad') !== -1) {
+			return 'iPad';
+		}
+	}
+
+	deviceOSversion() {
+		if (this.deviceType() == 'iPhone' || this.deviceType() == 'iPad') {
+			return this.deviceDescription.match(/(iOS [^;]+)/)[1].replaceAll('_', '.');
+		}
+	}
+
+	instagramVersion() {
+		return this.deviceDescription.match(/Instagram [0-9]+/)[0];
+	}
+
+	parseIPhoneDeviceName(name) {
+		const phonePossibility = iPhones.filter( phone => {
+			return phone.codes.includes(name);
+		});
+	
+		if (phonePossibility.length) {
+			return phonePossibility[0].name;
+		} else {
+			return "Unknown iPhone";
+		}
+	}
+
+	parseIpadDeviceName(name) {
+
+	}
+
+	lastSeen() {
+		return this.source.string_map_data['Last Login'].timestamp;
 	}
 }
 //#endregion
