@@ -1,3 +1,7 @@
+#tftp-logo {
+	width: 75px;
+}
+
 @media screen and (min-width: 768px) {
 	.columned-list {
 		column-count: 2;
