@@ -1,4 +1,6 @@
+//#region Setup, etc.
 const inputEl = document.getElementById('file-control');
+let files;
 //TODO: See comments in file. Also, unicode parsing for text.
 //TODO: Cool to have an analysis of who you mesage with the most often.
 
@@ -7,7 +9,8 @@ function dev() {
 	// At least in Firefox, refreshing keeps the files selected in inputEl.
 	// Run with a function from the Content Sections region: profileChanges(dev());
 	// Or loadSections(dev) to load everything.
-	return Object.values(inputEl.files);
+	files = Object.values(inputEl.files);
+	return Object.values(files);
 }
 
 function loadSections(files) {
@@ -26,9 +29,10 @@ function loadSections(files) {
 }
 
 inputEl.addEventListener('change', function(event) {
-	let files = Object.values(event.target.files);
+	files = Object.values(event.target.files);
 	loadSections(files);
 });
+//#endregion
 
 //#region Content Sections
 function aboutYou(files) {
@@ -213,6 +217,8 @@ function posts(files) {
 		});
 		
 		document.getElementById('posts-with-location-count').textContent = postsWithLocation.length;
+
+		setUpMap(postsWithLocation);
 
 		const postsWithMultiplePhotos = posts.filter(post => {
 			return post.hasMultiplePhotos();
@@ -489,7 +495,6 @@ function messages(files) {
 }
 //#endregion
 
-
 //#region File Utilities
 function getFileIfExists(files, target_name) {
 	const foundFiles = files.filter((file) => {
@@ -529,6 +534,14 @@ function loadImageContentIntoElement(files, name, element) {
 	if (file) {
 		element.src = URL.createObjectURL(file); // Hey don't need FileReader here!
 	} else { }
+}
+
+function getImageContent(name) {
+	const file = getFileIfExists(files, parsePathToName(name));
+	if (file) {
+		return URL.createObjectURL(file);
+	}
+	
 }
 
 function loadVideoContentIntoElement(files, name, element) {
@@ -660,6 +673,51 @@ function getTemplate(id) {
 }
 //#endregion
 
+//#region Map Utilities
+function setUpMap(posts) {
+	if (typeof mapboxToken === 'undefined') {
+		console.log('no token');
+		document.getElementById('posts-map').classList.add('d-none');
+		return;
+	}
+
+	const firstPostLocation = posts[0].getLocationData();
+	const postsMap = L.map('posts-map').setView([firstPostLocation.latitude, firstPostLocation.longitude], 5);
+
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		maxZoom: 18,
+		id: 'mapbox/streets-v11',
+		tileSize: 512,
+		zoomOffset: -1,
+		accessToken: 'pk.eyJ1IjoidGVjaGZvcnRoZXBwbCIsImEiOiJja20yNjJkeXAyaHA2Mm9uNm1seW8zMnNhIn0.k5V4zNqdgwuPe4PBujgCxw'
+	}).addTo(postsMap);
+	posts.forEach( post => {
+		const iconURL = getImageContent(post.source.media[0].uri);
+		const postLocation = post.getLocationData();
+
+		var postIcon = L.icon({
+			iconSize: [30, 30],
+			iconAnchor: [20, 20],
+			popupAnchor: [-3, -76],
+			iconUrl: iconURL
+		});
+	
+	
+		const postMarker = L.marker([postLocation.latitude, postLocation.longitude], {icon: postIcon}).addTo(postsMap);
+		const previewElement = document.createElement('div');
+		const previewImg = document.createElement('img');
+		previewImg.src = iconURL;
+		previewImg.classList.add('post-preview-image-in-map');
+		previewElement.appendChild(previewImg);
+		previewElement.appendChild(document.createTextNode(post.source.media[0].title));
+		previewElement.appendChild(document.createElement('br'));
+		previewElement.appendChild(document.createTextNode(dateToReadableDate(post.sortableDate())));
+		postMarker.bindPopup(previewElement);
+	});
+}
+//#endregion
+
 //#region Classes
 // Some variations in the structure of the JSON make it difficult to parse cleanly.
 // So classes help with that.
@@ -678,6 +736,14 @@ class MediaPost {
 		const hasVideoLocation = this.source.media[0].media_metadata?.video_metadata?.latitude ?? false; // jshint ignore:line
 
 		return hasPhotoLocation || hasVideoLocation;
+	}
+
+	getLocationData() {
+		if (this.isPhoto()) {
+			return this.source.media[0].media_metadata.photo_metadata;
+		} else if (this.isVideo()) {
+			return this.source.media[0].media_metadata.video_metadata;
+		}
 	}
 
 	hasMultiplePhotos() {

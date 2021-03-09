@@ -114,3 +114,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+support_files/mapbox_token.js
