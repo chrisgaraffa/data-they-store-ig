@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="">
+	<link rel="stylesheet" href="../style.css">
+
+	<title>What They Know: Facebook</title>
+<body>
+	<div class="container">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="#">
+					<img id="tftp-logo" src="https://techforthepeople.org/wp-content/uploads/2019/08/cropped-Asset-2-1.png" class="custom-logo" alt="Tech for the People" srcset="https://techforthepeople.org/wp-content/uploads/2019/08/cropped-Asset-2-1.png 250w, https://techforthepeople.org/wp-content/uploads/2019/08/cropped-Asset-2-1-150x150.png 150w" sizes="(max-width: 250px) 100vw, 250px"><br>
+					What They Know
+				</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item">
+						<a class="nav-link" href="https://whattheyknow.techforthepeople.org/">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="https://whattheyknow.techforthepeople.org/instagram">Instagram</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link active" aria-current="page" href="https://whattheyknow.techforthepeople.org/instagram">Facebook</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="https://whattheyknow.techforthepeople.org/twitter">Twitter</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="https://whattheyknow.techforthepeople.org/reddit">Reddit</a>
+					</li>
+				</div>
+			</div>
+		</nav>
+
+		<h1 class="mb-4">What They Know: Facebook</h1>
+
+		<section id="introduction" class="active">
+			<h1>Introduction</h1>
+			<p class="lead">Thanks to mass pressure and legal changes, most social networks let us export the data they have on us. This tool for your Facebook export will help you understand what information they have about you - including how many times you've changed your profile or your password, where you've logged in from, what they think your interests are and more.</p>
+			<h1 class="mt-4">Instructions</h1>
+			<p>
+				First, you need to download a copy of your Facebook data. It could take a day or two for Facebook to prepare it. They'll send you an email with a link to a file with the extension <code>.zip</code>.<br>
+				Open that file on your computer and it will give you a folder. Drag that folder to the Browse button below, or click the button and select it.
+			</p>
+		</section>
+
+		<br><br>
+
+		<input type="file" id="file-control" webkitdirectory directory multiple class="form-control">
+
+		<br><hr><br>
+
+		<ul class="position-sticky nav nav-pills top-0 bg-light" style="z-index: 999;">
+			<li class="nav-item">
+				<a class="nav-link" href="#introduction">Intro & Instructions</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#about-you-section">About You</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#profile-changes-section">Profile Changes</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#interests-section">Your Interests</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#stories-section">Stories</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#posts-section">Posts</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#devices-section">Devices</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#comments-section">Comments</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#likes-section">Likes</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#logins-section">Logins</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#suggestions-section">Suggestions</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#messages-section">Messages</a>
+			</li>
+		</ul>
+
+		<section id="about-you-section">
+			<h1>About You</h1>
+			<div class="card" id="about-you">
+				<div class="row">
+					<div class="col-sm-4 col-lg-2">
+						<img src id="about-you-image">
+					</div>
+					<div class="col-md-8 pt-2">
+						<h5 class="card-title" id="about-you-username">@<span class="content-value"></span></h5>
+						<div id="about-you-bio">Bio: <span class="content-value"></span></div>
+						<br><hr><br>
+						<div class="row">
+							<div class="col-xs-12 col-sm-6">
+								<div id="emails-youve-used">
+									<strong>Emails you've used with Facebook</strong>
+									<ul id="emails-youve-used-list"></ul>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-6">
+								<div id="names-youve-used">
+									<strong>Names you've used</strong>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-6">
+								<div id="relationships">
+									<strong>Relationships</strong><br>
+									You thought FB forgot when you moved on? Think again.
+									<ul id="relationships-list"></ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+	<script src="../support_files/date_utilities.js"></script>
+	<script src="../support_files/file_utilities.js"></script>
+	<script src="../support_files/mapbox_token.js"></script>
+	<script src="../support_files/iphones.js"></script>
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+	<script src="facebook.js"></script>
+</body>
+</html>
